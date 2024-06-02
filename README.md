@@ -1,6 +1,56 @@
 # CV-Project2
 Bird Species Recognition and Object Detection
 
+# Task 1: Bird Species Recognition (Resnet-18)
+
+## 1. Introduction
+
+This guide will walk you through creating an image classifier for the CUB_200_2011 bird species dataset. We provide a step by step example on how to train a deep learning model using PyTorch.
+
+## 2. Setup
+
+Before you start, ensure that you have the following requirements:
+
+* Python 3.6 or later.
+* PyTorch 1.0 or later.
+* A CUDA-compatible GPU is strongly recommended for training. 
+
+## 3. Getting the data
+
+In our example, we will use the CUB_200_2011 dataset. First, download the dataset from `https://www.kaggle.com/cub200/home` and extract it in the project directory with the following directory structure:
+
+```bash
+CUB_200_2011/
+    images/
+        [class directories]/
+            [image files]
+```
+
+## 4. Training the Model
+
+The script for training the model is provided in the same directory as this README file. The training process includes:
+
+1. Loading and dividing the data into training, validation, and testing sets.
+2. Creating and initializing a pre-trained ResNet-18 model from PyTorch.
+3. Defining the loss function and optimizer.
+4. Training the model on the training data.
+5. Validating the model on the validation data.
+6. Saving the best model based on validation performance.
+
+To train the model, run the script using the Python interpreter:
+
+    python resnet18_train.py
+
+The training process can take several hours depending on the computing power of your system. By default, this script runs the training process for 20 epochs, but this can be adjusted by modifying the `EPOCHS` variable in the script.
+
+## 5. Evaluating the Model
+
+After training, the model's performance can be evaluated on the test data by loading the saved model and using it to make predictions. Run the evaluation script using the Python interpreter:
+
+    python evaluate.py
+
+The script will print the loss and accuracy of the model on the test data.
+
 # Task 2: Object Detection (Faster-RCNN & YOLOV3)
 
 ## Prerequisites
