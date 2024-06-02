@@ -1,88 +1,66 @@
 # CV-Project2
 Bird Species Recognition and Object Detection
 
-Faster R-CNN Training on PASCAL VOC with MMDetection
+# Task 2: Object Detection (Faster-RCNN & YOLOV3)
 
-This repository provides instructions to train a Faster R-CNN model on the PASCAL VOC dataset using the MMDetection framework.
-Table of Contents
+## Prerequisites
 
-    Installation
-        Prepare MMDetection Environment
-        Prepare PASCAL VOC Dataset
-    Training
-    Visualizing Results
+1. Python 3.7 or later
+2. Pytorch 1.5.0 or later
+3. CUDA 10.1 or later (If you are using a GPU)
 
-Installation
-Prepare MMDetection Environment
+## Step 1: Prepare the MMdetection Environment
 
-    Clone the MMDetection repository:
+Before starting, ensure you have the MMDetection environment prepared. For complete instructions on setup, please refer to the [official MMDetection installation guide](https://mmdetection.readthedocs.io/en/latest/get_started.html#installation).
 
-    bash
+## Step 2: Prepare the PASCAL VOC Dataset
 
-git clone https://github.com/open-mmlab/mmdetection.git
-cd mmdetection
+Download the PASCAL VOC Dataset from its [official website](http://host.robots.ox.ac.uk/pascal/VOC/). Please organize the data in the following format:
 
-Install the dependencies:
+```
+VOCdevkit
+├── VOC2007
+│   ├── Annotations
+│   ├── ImageSets
+│   ├── JPEGImages
+│   ├── SegmentationClass
+│   └── SegmentationObject
+└── VOC2012
+    ├── Annotations
+    ├── ImageSets
+    ├── JPEGImages
+    ├── SegmentationClass
+    └── SegmentationObject
+```
 
-bash
+## Step 3: Training the Model
 
-pip install -r requirements/build.txt
-pip install -v -e .
+Navigate to your MMdetection directory. Use the script `tools/train.py` followed by the configuration file intended for Faster R-CNN / YOLOv3 on PASCAL VOC Dataset. Please replace `path/to/your/work_dir` with the actual path.
 
-Install MMCV:
+```bash
+!python tools/train.py configs/pascal_voc/faster-rcnn_r50_fpn_1x_voc0712.py --work-dir path/to/your/work_dir
+```
 
-bash
+```bash
+!python tools/train.py configs/pascal_voc/yolov3_d53_8xb8-ms-608-273e_coco.py --work-dir path/to/your/work_dir
+```
 
-    pip install mmcv-full
+## Step 4: Review the Results
 
-Prepare PASCAL VOC Dataset
+Import the necessary modules and the model checkpoint for the test image:
 
-    Download the PASCAL VOC 2007 and 2012 datasets from the official website and unzip them into a directory:
-
-    bash
-
-wget http://host.robots.ox.ac.uk/pascal/VOC/voc2007/VOCtrainval_06-Nov-2007.tar
-wget http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar
-tar -xvf VOCtrainval_06-Nov-2007.tar -C /path/to/voc/
-tar -xvf VOCtrainval_11-May-2012.tar -C /path/to/voc/
-
-Create symbolic links for VOC2007 and VOC2012:
-
-bash
-
-    ln -s /path/to/voc/VOCdevkit /mmdetection/data/VOCdevkit
-
-Training
-
-Train the Faster R-CNN model using MMDetection tools and configurations. Use the following command to start training:
-
-bash
-
-python tools/train.py configs/pascal_voc/faster-rcnn_r50_fpn_1x_voc0712.py --work-dir path/to/your/work_dir
-
-Replace path/to/your/work_dir with your desired working directory to save checkpoints and logs.
-Visualizing Results
-
-After training, you can visualize the results using the following script:
-
-python
-
+```python
 import mmcv
 from mmdet.apis import init_detector, inference_detector
-from mmengine.visualization import Visualizer
-
-# Load an image
-img = mmcv.imread('/kaggle/input/pascal-voc-2007-and-2012/VOCdevkit/VOC2007/JPEGImages/000001.jpg', channel_order='rgb')
-
-# Initialize the model
-checkpoint_file = '/kaggle/working/work_dir/epoch_4.pth'  # Replace with your checkpoint file
-cfg = 'configs/pascal_voc/faster-rcnn_r50_fpn_1x_voc0712.py'  # Replace with your config file
+img = mmcv.imread('/path/to/your/test_image.jpg', channel_order='rgb')
+checkpoint_file = '/path/to/your/checkpoint_file.pth'
 model = init_detector(cfg, checkpoint_file, device='cpu')
-
-# Perform inference
 new_result = inference_detector(model, img)
+```
+To visualize the detection results:
 
-# Visualize the results
+```python
+from mmengine.visualization import Visualizer
 visualizer_now = Visualizer.get_current_instance()
 visualizer_now.dataset_meta = model.dataset_meta
 visualizer_now.add_datasample(
@@ -95,5 +73,6 @@ visualizer_now.add_datasample(
     pred_score_thr=0.5
 )
 visualizer_now.show()
+```
 
-Make sure to replace the paths with your actual paths to the image, configuration file, and checkpoint file.
+Make sure to replace `/path/to/your/test_image.jpg` and `/path/to/your/checkpoint_file.pth` with the path to your test image and checkpoint file, respectively. 
