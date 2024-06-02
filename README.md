@@ -41,6 +41,12 @@ Navigate to your MMdetection directory. Use the script `tools/train.py` followed
 !python tools/train.py configs/pascal_voc/faster-rcnn_r50_fpn_1x_voc0712.py --work-dir path/to/your/work_dir
 ```
 
+The default configuration for YOLOv3 in MMDetection is to train on the COCO dataset. When you are dealing with the PASCAL VOC dataset, certain parameters in the config file needs to be modified accordingly.
+
+To make your task easier, I have prepared a customized version of config for YOLOv3 training on PASCAL VOC, which is included in this Github repository named 'yolov3_d53_8xb8-ms-608-273e_coco.py'. Please replace the default config with this file. 
+
+Once the configuration file is updated, use the following command to train the model:
+
 ```bash
 !python tools/train.py configs/pascal_voc/yolov3_d53_8xb8-ms-608-273e_coco.py --work-dir path/to/your/work_dir
 ```
